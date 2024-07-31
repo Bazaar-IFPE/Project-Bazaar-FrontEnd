@@ -2,7 +2,7 @@ import React from "react";
 import { BsInstagram } from "react-icons/bs";
 
 import "./otherFooter.css";
-import LogoBranca from "../../assets/logo-branca.png";
+import LogoBranca from "../../assets/logo-laranja.png";
 
 export default function Footer() {
   return (
