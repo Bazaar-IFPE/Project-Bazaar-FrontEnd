@@ -25,6 +25,7 @@ export default function LoginPage() {
     setLoading(true);
     axios.post('http://localhost:8080/api/usuario/login', user)
      .then((response) => {
+        localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem('login', response.data.login);
         setLoading(false);
