@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import {Button, Grid, Image, GridColumn, ButtonGroup, List} from "semantic-ui-react";
+import { Button, Grid, Image, GridColumn, ButtonGroup, List } from "semantic-ui-react";
 import Header from "../../components/header/header";
 import Footer from "../../components/otherFooter/otherFooter";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
+  const [userData, setUserData] = useState(null);
 
   const getUserId = () => {
     const userId = localStorage.getItem('userId');
@@ -13,7 +14,7 @@ export default function ProfilePage() {
     return userId;
   };
 
-  const UserData = async (setUserData) => {
+  useEffect(() => {
     const userId = getUserId();
 
     if (!userId) {
@@ -21,25 +22,19 @@ export default function ProfilePage() {
       return;
     }
 
-    try {
-      const response = await axios.get(`http://localhost:8080/api/usuario/${userId}`);
-      console.log('Estado da Resposta:', response.status);
-      if (response.status === 200) {
-        const userData = response.data;
-        console.log('Dados do usuário obtidos com sucesso:', userData);
-        setUserData(userData);
-      } else {
-        console.error('Erro ao buscar dados do usuário', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Erro ao fazer a requisição:', error);
-    }
-  };
-
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    UserData(setUserData);
+    axios.get(`http://localhost:8080/api/usuario/${userId}`)
+      .then(response => {
+        if (response.status === 200) {
+          const userData = response.data;
+          console.log('Dados do usuário obtidos com sucesso:', userData);
+          setUserData(userData);
+        } else {
+          console.error('Erro ao buscar dados do usuário', response.status, response.statusText);
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao fazer a requisição:', error);
+      });
   }, []);
 
   return (
@@ -96,6 +91,7 @@ export default function ProfilePage() {
                     <Button color="orange" circular size="big">
                       Adicionar Endereço
                     </Button>
+                    
                     <br />
                     <br />
                   </ButtonGroup>
